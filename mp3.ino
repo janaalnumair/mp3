@@ -21,19 +21,17 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 SoftwareSerial mySoftwareSerial(PIN_RX, PIN_TX);
 DFRobotDFPlayerMini myDFPlayer;
 
-// --- SONG NAME LIST ---
-const char* songNames[] = {
-  "Affection",   // Track 0001.mp3
-  "..",
-  "Bubblegum",    // Track 0002.mp3
-  "..",
-  "Don't...Go",         // Track 0003.mp3
-  "..",
-  "Heavenly",       // Track 0004.mp3
-  
-  "k.",  // Track 0005.mp3
-  
-
+// =========================================================================
+// AUTOMATED PLAYLIST SECTION (Stored in Flash Memory safely to save RAM)
+// =========================================================================
+// Simply type your song names inside the curly braces separated by commas.
+// The code automatically counts them and reads them from Flash (PROGMEM).
+const char songNames[][30] PROGMEM = {
+  "Affection",   // Track 1 -> Folder 01/001.mp3
+  "Bubblegum",    // Track 2 -> Folder 01/002.mp3
+  "Don't Let Go",         // Track 3 -> Folder 01/003.mp3
+  "Heavenly",       // Track 4 -> Folder 01/004.mp3
+  "K."   // Track 5 -> Folder 01/005.mp3
 };
 const int totalConfiguredSongs = sizeof(songNames) / sizeof(songNames[0]);
 
@@ -41,7 +39,7 @@ const int totalConfiguredSongs = sizeof(songNames) / sizeof(songNames[0]);
 bool isPlaying = false;
 int currentTrack = 1;
 int currentVolume = 12; 
-int totalTracks = 0;
+int totalTracks = totalConfiguredSongs;
 
 // Button Timing and Cooldown Variables
 const unsigned long LONG_PRESS_TIME = 500;   
@@ -64,7 +62,7 @@ void updateScreen(String statusText) {
   display.setCursor(0, 0);
   display.print(statusText);
   display.setCursor(85, 0);
-  display.print("V:");
+  display.print("Vol:");
   display.print(currentVolume);
   
   display.drawFastHLine(0, 10, 128, SSD1306_WHITE);
@@ -75,7 +73,9 @@ void updateScreen(String statusText) {
   
   int listIndex = currentTrack - 1; 
   if (listIndex >= 0 && listIndex < totalConfiguredSongs) {
-    display.print(songNames[listIndex]);
+    char buffer[32]; 
+    strcpy_P(buffer, songNames[listIndex]);
+    display.print(buffer);
   } else {
     display.print("Track ");
     display.print(currentTrack);
