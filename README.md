@@ -23,6 +23,38 @@ this build: after a skip, the module may stop or become one track out of sync
 with the display. Pressing skip again advances both the module and the display
 to the expected track.
 
+### Example
+
+Suppose the SD card contains three tracks: `Song 1`, `Song 2`, and `Song 3`.
+If the names are added without placeholders:
+
+```cpp
+const char* songNames[] = {
+  "Song 1",
+  "Song 2",
+  "Song 3"
+};
+```
+
+the first track works normally, but pressing **Next** may show `Song 2` while
+the DFPlayer stops. Pressing **Next** again may show `Song 3` while the player
+plays `Song 2`, leaving the display and audio out of sync.
+
+Adding a placeholder gives the player an extra step to recover:
+
+```cpp
+const char* songNames[] = {
+  "Song 1",
+  "..",
+  "Song 2",
+  "..",
+  "Song 3"
+};
+```
+
+With this workaround, the first press can show `".."` while the DFPlayer
+recovers, and the next press shows the correct name for the track that plays.
+
 Keep the names in the same order as the files on the SD card. The sketch uses
 the track number as the array index, so a name at index 0 represents track 1.
 
