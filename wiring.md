@@ -1,37 +1,62 @@
-arduino nano
-5v -> VCC on breadboard
-GND -> GND on breadboard
-5a -> SCK on screen (3rd pin)
-4a -> SDA on screen (4th pin)
-2d -> TX on DFPlayer (3rd pin)
-3d -> 1k ressistor -> rx on dfplayer (2nd pin)
-4d -> play/pause button
-5d -> skip forward/volume up button
-6d -> skip backwards/volume down button
+# Wiring
 
-screen
-gnd -> GND on breadboard
-VCC -> VCC on breadboard
-sck -> 5a on arduino
-sda -> 4a on arduino
+All Arduino pin names below use the Arduino Nano labels (`A4`, `A5`, `D2`,
+etc.). Disconnect power before changing the wiring.
 
-dfplayer
-vcc(pin1) -> vcc on breadboard
-rx(pin2) -> 1k ressistor -> 3d on arduino
-tx(pin3) -> 2d on arduino
-dac_r(pin4) -> ring1(pin2) on trrs
-dac_l(pin5) -> tip(pin1) on trrs
-gnd(pin7) -> ring2(pin3) on trrs
-gnd(pin10) -> gnd on breadboard
+## Arduino Nano
 
-trrs 
-tip(pin1) -> dac_l(pin5) on dfplayer
-ring1(pin2) -> dac_r(pin4) on dfplayer
-ring2(pin3) -> gnd(pin7) on dfplayer
+| Nano pin | Connection |
+| --- | --- |
+| 5V | Breadboard VCC rail |
+| GND | Breadboard GND rail |
+| A5 | OLED SCL/SCK |
+| A4 | OLED SDA |
+| D2 | DFPlayer TX, pin 3 |
+| D3 | 1 kOhm resistor, then DFPlayer RX, pin 2 |
+| D4 | Play/pause button |
+| D5 | Next/volume-up button |
+| D6 | Previous/volume-down button |
 
-play/pause button -> 4d and gnd on breadboard
-skip forward/volume up button -> 5d and GND on breadboard
-skip backwards/volume down button -> 6d and GND on breadboard
+## OLED display
+
+| OLED pin | Connection |
+| --- | --- |
+| GND | Breadboard GND rail |
+| VCC | Breadboard VCC rail |
+| SCK/SCL | Nano A5 |
+| SDA | Nano A4 |
+
+## DFPlayer Mini
+
+| DFPlayer pin | Connection |
+| --- | --- |
+| VCC, pin 1 | Breadboard VCC rail |
+| RX, pin 2 | 1 kOhm resistor, then Nano D3 |
+| TX, pin 3 | Nano D2 |
+| DAC_R, pin 4 | TRRS ring 1, pin 2 |
+| DAC_L, pin 5 | TRRS tip, pin 1 |
+| GND, pin 7 | TRRS ring 2, pin 3 |
+| GND, pin 10 | Breadboard GND rail |
+
+The direct connection from DFPlayer pin 7 to the TRRS audio ground is
+intentional and helps reduce constant background buzzing.
+
+## Buttons
+
+Connect one terminal of each button to the listed Nano pin and the other
+terminal to the breadboard GND rail:
+
+- Play/pause: D4
+- Next/volume up: D5
+- Previous/volume down: D6
+
+The sketch configures these inputs with `INPUT_PULLUP`.
+
+## TRRS audio connection
+
+- Tip, pin 1 -> DFPlayer DAC_L, pin 5
+- Ring 1, pin 2 -> DFPlayer DAC_R, pin 4
+- Ring 2, pin 3 -> DFPlayer GND, pin 7
 
 
 
